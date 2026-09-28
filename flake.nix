@@ -16,6 +16,12 @@
     };
   };
 
+  nixConfig = {
+    accept-flake-config = true;
+    extra-substituters = ["https://switchyard.cachix.org"];
+    extra-trusted-public-keys = ["switchyard.cachix.org-1:pXDS2Jt8ioyQjcyK4PCs9DFdiOU4POPjAfEvw4gWoxA="];
+  };
+
   outputs = inputs @ {flake-parts, ...}:
     flake-parts.lib.mkFlake {inherit inputs;} {
       systems = [
