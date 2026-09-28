@@ -24,7 +24,7 @@
     "open-in-switchyard": {
       "suggested_key": {
         "default": "Ctrl+Shift+U",
-        "mac": "MacCtrl+Shift+U"
+        "mac": "Command+Shift+U"
       },
       "description": "Open the current page in Switchyard"
     }
