@@ -82,7 +82,20 @@ func showLauncherWindow(app *adw.Application, url string, browsers []*Browser, c
 	win.SetContent(mainBox)
 
 	keyController := gtk.NewEventControllerKey()
+	// Handle launcher shortcuts during capture so Ctrl + C works even when the URL
+	// entry has focus (where GTK would otherwise treat it as text editing).
+	keyController.SetPropagationPhase(gtk.PhaseCapture)
 	keyController.ConnectKeyPressed(func(keyval, keycode uint, state gdk.ModifierType) bool {
+		if keyval == gdk.KEY_c && state&gdk.ControlMask != 0 {
+			if display := gdk.DisplayGetDefault(); display != nil {
+				display.Clipboard().SetText(urlEntry.Text())
+			}
+			if cfg.AutoCloseAfterCopy {
+				win.Close()
+			}
+			return true
+		}
+
 		// Ctrl+[1-9] selects a browser by position.
 		if keyval >= gdk.KEY_1 && keyval <= gdk.KEY_9 && state&gdk.ControlMask != 0 {
 			idx := int(keyval - gdk.KEY_1)
